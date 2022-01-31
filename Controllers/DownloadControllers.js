@@ -9,6 +9,7 @@ class downloadController {
         }
     }
     async upload(req, res) {
+        console.log(req.params.path);
         let filedata = req.files;
         console.log(filedata);
         if (!filedata)

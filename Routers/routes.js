@@ -1,7 +1,7 @@
 const {Router} = require('express')
 const router = Router()
 const postsController = require('../Controllers/PostControllers')
-const lessonsController = require('../Controllers/LessonsControllers')
+const lessonsController = require('../Controllers/LessonControllers')
 const downloadController = require('../Controllers/DownloadControllers')
 const mailController = require('../Controllers/MailController')
 
@@ -16,7 +16,7 @@ router.get('/profession', lessonsController.getAllLessons)
 router.get('/profession/:type/:id/delete', lessonsController.deleteLesson)
 
 router.get('/download/:filename', downloadController.download)
-router.post('/upload', downloadController.upload)
+router.post('/upload/:path', downloadController.upload)
 
 router.post('/results', mailController.sendmail)
 
