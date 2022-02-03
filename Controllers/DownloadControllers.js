@@ -9,13 +9,18 @@ class downloadController {
         }
     }
     async upload(req, res) {
-        console.log(req.params.path);
-        let filedata = req.files;
-        console.log(filedata);
+        let filedata = req.files
         if (!filedata)
-            res.send("Ошибка при загрузке файла");
-        else
-            res.send("Файл загружен");
+            res.send("Ошибка при загрузке файла")
+        else {
+            const link = "http://" + process.env.HOST_NAME + req.params.path.split('-').join('/') + '/' + filedata[0].filename
+
+            res.status(200).json({
+                message: 'Файл успешно загружен',
+                link
+            })
+        }
+
     }
 }
 module.exports = new downloadController()

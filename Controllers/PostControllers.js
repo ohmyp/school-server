@@ -4,22 +4,21 @@ class postsController {
     async createPost(req, res) {
         try {
             const post = new Post({
-                id: req.query.id,
-                title: req.query.title,
-                headText: req.query.headText,
-                bottomText: req.query.bottomText,
-                image: req.query.image
+                id: req.body.id,
+                title: req.body.title,
+                headText: req.body.headText,
+                bottomText: req.body.bottomText,
+                image: req.body.image
             })
             await post.save()
-            return res.status(200).json({
-                message: "post created successfully"
-            })
+            return res.status(200).json({message: "post created successfully"})
 
         } catch (e) {
-            console.log(e.message);
-            res.status(400).json({
-                error: e.message
-            })
+            console.log(e);
+            if (e.code === 11000){
+                return res.status(400).send({message: `Пост с таким номером (${e.keyValue.id}) уже существует!`})
+            }
+            return res.status(400).send({message: e.message})
         }
     }
     async getPost(req, res) {
@@ -34,12 +33,11 @@ class postsController {
         }
     }
     async deletePost(req, res) {
-        console.log(req.params);
         try {
             const posts = await Post.deleteOne({
                 id: req.params.id
             })
-            if (!posts.deletedCount) {res.status(400).json({message: `no post with id ${req.params.id}`})}
+            if (!posts.deletedCount) {return res.status(400).json({message: `no post with id ${req.params.id}`})}
             return res.status(200).json({
                 message: "post deleted successfully"
             })

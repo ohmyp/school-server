@@ -1,9 +1,11 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+const mailHandler = require('../Handlers/MailHandler')
 
+// TODO Запись в базу данных
 class mailController {
     async sendmail(req, res) {
-        console.log(req.body, req.query, req.params);
+        const html = mailHandler.makeLetter(req.body)
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -17,7 +19,7 @@ class mailController {
             to: process.env.MAIL_TO,
             subject: "Результаты анкетирования", 
             text: JSON.stringify(req.query),
-            html: JSON.stringify(req.query),
+            html,
         });
 
         console.log(`Message sent: ${info.messageId}`);
