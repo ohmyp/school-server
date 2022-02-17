@@ -1,7 +1,9 @@
+const fs = require('fs');
+
 class downloadController {
     async download(req, res) {
         try {
-            const file = `public/Documents/${req.params.filename}`;
+            const file = `files/admin/createpost/${req.params.filename}`;
             return res.download(file)
         } catch (e) {
             console.log(e);
@@ -20,6 +22,17 @@ class downloadController {
                 link
             })
         }
+
+    }
+    async getFiles(req, res) {
+        const testFolder = '/Users/ohmyp/web-developement/school-server/files/admin/createpost'
+        fs.readdir(testFolder, (err, files) => {
+            let filesInFolder = []
+            files.forEach(file => {
+                filesInFolder.push(file)
+            })
+            res.json(JSON.stringify(filesInFolder))
+        })
 
     }
 }

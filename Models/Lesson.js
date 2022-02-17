@@ -21,8 +21,8 @@ const schema = new Schema({
         required: true,
     },
     files: [{
-        fileName: String,
-        href: String
+        fileName: {type: String},
+        href: {type :String}
     }]
 });
 

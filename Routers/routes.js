@@ -11,12 +11,14 @@ router.get('/posts/:id', postsController.getPost)
 router.get('/posts/:id/delete', postsController.deletePost)
 
 router.get('/profession/:type', lessonsController.getLessons)
+router.get('/profession/:type/:id', lessonsController.getLesson)
 router.post('/profession/:type', lessonsController.createLesson)
 router.get('/profession', lessonsController.getAllLessons)
 router.get('/profession/:type/:id/delete', lessonsController.deleteLesson)
 
 router.get('/download/:filename', downloadController.download)
 router.post('/upload/:path', downloadController.upload)
+router.get('/files', downloadController.getFiles)
 
 router.post('/results', mailController.sendmail)
 
