@@ -48,6 +48,6 @@ app.use(multer({storage: storageConfig}).array("filedata"));
 app.use(cors())
 app.use('/api', router)
 
-app.listen(process.env.PORT || 3001, () => {
+app.listen(process.env.PORT || 3001, process.env.HOST_NAME || 'localhost', () => {
     console.log('server started')
 })

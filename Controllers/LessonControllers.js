@@ -3,13 +3,13 @@ const Lesson = require('../models/Lesson')
 class lessonsController {
 
     async createLesson(req, res) {
+        console.log(req.body);
         try {
             const lesson = new Lesson({
                 id: req.body.id,
                 title: req.body.title,
-                image: req.body.image,
                 type: req.params.type,
-                files: JSON.parse(req.body.files)
+                files: req.body.files
             })
             await lesson.save()
             return res.status(200).json({
