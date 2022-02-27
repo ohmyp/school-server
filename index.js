@@ -8,6 +8,9 @@ const path = require('path');
 const cors = require('cors');
 const { formatDate } = require('./Handlers/DateHandler')
 
+const port = process.env.PORT || 3001
+const host = process.env.HOST_NAME || 'localhost'
+
 mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log("DB Connected");
 });
@@ -48,6 +51,6 @@ app.use(multer({storage: storageConfig}).array("filedata"));
 app.use(cors())
 app.use('/api', router)
 
-app.listen(process.env.PORT || 3001, process.env.HOST_NAME || 'localhost', () => {
-    console.log('server started')
+app.listen(port, host, () => {
+    console.log(`server started on ${host}:${port}`)
 })
