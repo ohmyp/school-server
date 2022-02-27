@@ -1,4 +1,4 @@
-const Lesson = require('../models/Lesson')
+const Lesson = require('../Models/Lesson')
 
 class lessonsController {
 

@@ -36,9 +36,7 @@ const storageConfig = multer.diskStorage({
 
     },
     filename: (req, file, cb) => {
-        d = new Date()
-        filename = `${formatDate(d.getHours())}:${formatDate(d.getMinutes())}_${formatDate(d.getDay())}:${formatDate(d.getMonth())}:${d.getFullYear()}__${file.originalname}`
-        cb(null, filename);
+        cb(null, file.originalname);
     }
 });
 
