@@ -25,7 +25,6 @@ class downloadController {
 
     }
     async getFiles(req, res) {
-console.log(process.env.PATH) 
        const testFolder = `${process.env.FOLDER_PATH}/files/admin/${req.params.category}`
         fs.readdir(testFolder, (err, files) => {
             let filesInFolder = []

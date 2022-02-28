@@ -59,18 +59,6 @@ class lessonsController {
             res.status(500).json(e)
         }
     }
-    async getLesson(req, res) {
-        try {
-            const lessons = await Lesson.findOne({
-                type: req.params.type,
-                id: req.params.id
-            })
-            return res.status(200).json(lessons)
-        } catch (e) {
-            console.log(e);
-            res.status(500).json(e)
-        }
-    }
     async getAllLessons(req, res) {
         try {
             const lessons = await Lesson.find({})
@@ -80,6 +68,27 @@ class lessonsController {
             res.status(500).json(e)
         }
     }
+    async updateLesson(req, res) {
+        try {
+            const update = await Lesson.findOneAndUpdate({
+                type: req.params.type,
+                id: req.params.id
+            }, {
+                id: req.body.id,
+                title: req.body.title,
+                type: req.params.type,
+                files: req.body.files
+            }, {
+                new: true
+            }
+            )
+            return res.status(200).json(update)
+        } catch (e) {
+            console.log(e);
+            res.status(500).json(e)
+        }
+    }
+
 }
 
 module.exports = new lessonsController()

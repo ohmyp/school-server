@@ -55,6 +55,27 @@ class postsController {
             res.status(500).json(e)
         }
     }
+    async updatePost(req, res) {
+        try {
+            const update = await Post.findOneAndUpdate(
+                {
+                    id: req.params.id
+                }, {
+                    id: req.body.id,
+                    title: req.body.title,
+                    headText: req.body.headText,
+                    bottomText: req.body.bottomText,
+                    image: req.body.image
+                }, {
+                    new: true
+                }
+            )
+            return res.status(200).json(update)
+        } catch (e) {
+            console.log(e);
+            res.status(500).json(e)
+        }
+    }
 }
 
 module.exports = new postsController()
