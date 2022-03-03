@@ -6,7 +6,6 @@ const router = require('./Routers/routes')
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
-const { formatDate } = require('./Handlers/DateHandler')
 
 const port = process.env.PORT || 3001
 const host = process.env.HOST_NAME || 'localhost'

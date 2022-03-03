@@ -3,7 +3,6 @@ const Lesson = require('../Models/Lesson')
 class lessonsController {
 
     async createLesson(req, res) {
-        console.log(req.body);
         try {
             const lesson = new Lesson({
                 id: req.body.id,
