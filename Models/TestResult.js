@@ -29,7 +29,11 @@ const schema = new Schema({
     results: {
         type: Object,
         required: true
-    }
+    },
+    date: {
+        type: String,
+        required: true,
+    },
 });
 
 module.exports = model("TestResult", schema)

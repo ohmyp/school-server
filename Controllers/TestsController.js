@@ -1,5 +1,6 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+const { dateToNormal } = require("../Handlers/DateHandler");
 const mailHandler = require('../Handlers/MailHandler')
 const TestResult = require('../Models/TestResult')
 
@@ -7,7 +8,15 @@ class testsController {
     async getResults(req, res){
         try {
             const results = await TestResult.find({id:req.params.id})
-            console.log(results)
+            res.send(results)
+        } catch (e) {
+            console.log(e);
+            res.status(400)
+        }
+    }
+    async getAllResults(req, res){
+        try {
+            const results = await TestResult.find({})
             res.send(results)
         } catch (e) {
             console.log(e);
@@ -15,7 +24,6 @@ class testsController {
         }
     }
     async sendMail(req, res) {
-        console.log(req.body);
         const html = mailHandler.makeLetter(req.body)
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -40,16 +48,15 @@ class testsController {
                 lastName: req.body.user.lastName,
                 classNumber: req.body.user.classNumber,
                 classLetter: req.body.user.classLetter,
-                results: req.body.results
+                results: req.body.results,
+                date: dateToNormal(req.body.date)
             })
             await testResult.save()
             res.send("ok").status(200)
         } catch (e) {
             console.log(e);
-            
         }
-        
+    
     }
-
 }
 module.exports = new testsController()
