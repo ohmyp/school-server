@@ -43,7 +43,7 @@ class authController {
                         username: candidate.username,
                         role: candidate.role
                     }, process.env.JWT_SECRET)
-                    res.json({accessToken})
+                    res.json({accessToken, username: candidate.username, role: candidate.role})
                 }
                 else res.send('Password incorrect')
             })
@@ -52,7 +52,7 @@ class authController {
         }
     }
     async getUsers (req, res, next){
-        const users = await User.find({})
+        const users = await UserNoHash.find({})
         res.json(users)
     }
 }

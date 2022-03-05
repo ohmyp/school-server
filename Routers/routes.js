@@ -3,7 +3,7 @@ const router = Router()
 const postsController = require('../Controllers/PostControllers')
 const lessonsController = require('../Controllers/LessonControllers')
 const downloadController = require('../Controllers/DownloadControllers')
-const mailController = require('../Controllers/MailController')
+const testsController = require('../Controllers/TestsController')
 const authController = require('../Controllers/AuthController')
 const authMiddlewares = require('../Middlewares/AuthMiddleware')
 
@@ -14,7 +14,7 @@ router.get('/posts/:id', postsController.getPost)
 router.get('/posts/:id/delete', postsController.deletePost)
 router.post('/posts/:id/update', postsController.updatePost)
 
-router.get('/profession/:type', authMiddlewares.authenticateJWT,lessonsController.getLessons)
+router.get('/profession/:type', lessonsController.getLessons)
 router.get('/profession/:type/:id', lessonsController.getLesson)
 router.post('/profession/:type/create', lessonsController.createLesson)
 router.get('/profession', lessonsController.getAllLessons)
@@ -25,10 +25,11 @@ router.get('/download/:filename', downloadController.download)
 router.post('/upload/:path', downloadController.upload)
 router.get('/files/:category', downloadController.getFiles)
 
-router.post('/auth/register', authController.register)
-router.post('/auth/login', authController.login)
-router.get('/auth/users', authController.getUsers)
+router.post('/auth/register', authMiddlewares.authenticateJWT, authController.register)
+router.post('/auth/login', authMiddlewares.authenticateJWT, authController.login)
+router.get('/auth/users', authMiddlewares.authenticateJWT, authController.getUsers)
 // authMiddlewares.authenticateJWT
-router.post('/results', mailController.sendmail)
+router.post('/results', authMiddlewares.authenticateJWT, testsController.sendMail)
+router.get('/results/:id', authMiddlewares.authenticateJWT, testsController.getResults)
 
 module.exports = router
