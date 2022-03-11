@@ -41,9 +41,16 @@ class authController {
                 if (result){
                     const accessToken = jwt.sign({
                         username: candidate.username,
-                        role: candidate.role
+                        role: candidate.role,
+                        username: candidate.username, 
+                        name: candidate.name,
+                        surname: candidate.surname,
+                        middlename: candidate.middlename,
+                        classname: candidate.classname
                     }, process.env.JWT_SECRET)
-                    res.json({accessToken, username: candidate.username, role: candidate.role})
+                    res.json({
+                        accessToken
+                    })
                 }
                 else res.send('Password incorrect')
             })
@@ -54,6 +61,19 @@ class authController {
     async getUsers (req, res, next){
         const users = await UserNoHash.find({})
         res.json(users)
+    }
+    async auth (req, res, next){
+        const authHeader = req.headers.authorization
+        if (authHeader) {
+            const token = authHeader.split(' ')[1]
+            jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+                if (err) return res.json(err)
+                if (user.role !== "admin") return res.send({error: "no auth"}) 
+                return res.json(user)
+            })
+        } else {
+            res.sendStatus(401)
+        }
     }
 }
 
