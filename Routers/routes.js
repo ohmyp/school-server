@@ -29,7 +29,7 @@ router.get('/auth', authController.auth)
 router.post('/auth/register', authenticateJWT, authController.register)
 router.post('/auth/login', authController.login)
 router.get('/auth/users', authenticateJWT, authController.getUsers)
-// authenticateJWT
+
 router.post('/results', testsController.sendMail)
 router.get('/results', authenticateJWT, testsController.getAllResults)
 router.get('/results/:id', authenticateJWT, testsController.getResults)

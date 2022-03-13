@@ -24,22 +24,22 @@ class testsController {
         }
     }
     async sendMail(req, res) {
-        const html = mailHandler.makeLetter(req.body)
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.SMTP_MAIL,
-                pass: process.env.SMTP_PASSWORD,
-            },
-        })
+        // const html = mailHandler.makeLetter(req.body)
+        // const transporter = nodemailer.createTransport({
+        //     service: 'gmail',
+        //     auth: {
+        //         user: "oneschool511@gmail.com",
+        //         pass: "ifmoCRETA2133mari",
+        //     },
+        // })
 
-        const info = await transporter.sendMail({
-            from: `"Единая школа 511" <${process.env.SMTP_MAIL}>`, 
-            to: process.env.MAIL_TO,
-            subject: "Результаты анкетирования", 
-            text: JSON.stringify(req.query),
-            html,
-        });
+        // const info = await transporter.sendMail({
+        //     from: `"Единая школа 511" <oneschool511@gmail.com>`, 
+        //     to: "sherbaken0875@icloud.com",
+        //     subject: "Результаты анкетирования", 
+        //     text: JSON.stringify(req.query),
+        //     html,
+        // });
         try {
             const testResult = new TestResult({
                 id: req.body.id,

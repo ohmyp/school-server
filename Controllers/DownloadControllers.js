@@ -3,7 +3,7 @@ const fs = require('fs');
 class downloadController {
     async download(req, res) {
         try {
-            const file = `files/admin/createlesson/${req.params.filename}`;
+            const file = `${process.env.FILES_PATH}admin/createlesson/${req.params.filename}`;
             return res.download(file)
         } catch (e) {
             console.log(e);
@@ -15,7 +15,7 @@ class downloadController {
         if (!filedata)
             res.send("Ошибка при загрузке файла")
         else {
-            const link = "http://" + process.env.HOST_NAME + req.params.path.split('-').join('/') + '/' + filedata[0].filename
+            const link = "https://api.oneschool511.ru/static/"  + req.params.path.split('-').join('/') + '/' + filedata[0].filename
 
             res.status(200).json({
                 message: 'Файл успешно загружен',
@@ -25,7 +25,7 @@ class downloadController {
 
     }
     async getFiles(req, res) {
-       const testFolder = `${process.env.FOLDER_PATH}/files/admin/${req.params.category}`
+       const testFolder = `${process.env.FILES_PATH}admin/${req.params.category}`
         fs.readdir(testFolder, (err, files) => {
             let filesInFolder = []
             files.forEach(file => {

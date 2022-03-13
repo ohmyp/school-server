@@ -8,9 +8,10 @@ const path = require('path');
 const cors = require('cors');
 
 const port = process.env.PORT || 3001
-const host = process.env.HOST_NAME || 'localhost'
+const host = process.env.HOST_NAME || '127.0.0.1'
+const mongo_uri = process.env.MONGO_URI
 
-mongoose.connect(process.env.MONGO_URL).then(() => {
+mongoose.connect(mongo_uri).then(() => {
     console.log("DB Connected");
 });
 
@@ -43,7 +44,7 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.use(express.static('files'));
+app.use('/static', express.static(__dirname + '/files'));
 app.use(multer({storage: storageConfig}).array("filedata"));
 app.use(cors())
 app.use('/api', router)

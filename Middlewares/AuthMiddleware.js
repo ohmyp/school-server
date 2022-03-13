@@ -18,8 +18,3 @@ class authMiddlewares {
     }
 }
 module.exports = new authMiddlewares()
-
-// const {role} = req.user;
-// if (role !== 'role') {
-//     return res.sendStatus(401);
-// }
