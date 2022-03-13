@@ -53,10 +53,10 @@ class authController {
                         accessToken
                     })
                 }
-                else res.send('Password incorrect')
+                else res.json({error:'Неправильный пароль'})
             })
         } else {
-            res.send('Username incorrect')
+            res.send({error:'Неправильное имя пользователя'})
         }
     }
     async getUsers (req, res, next){
