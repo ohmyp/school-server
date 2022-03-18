@@ -1,3 +1,4 @@
+const logger = require('../logger')
 const Post = require('../Models/Post')
 
 class postsController {
@@ -11,9 +12,10 @@ class postsController {
                 image: req.body.image
             })
             await post.save()
+            logger.admin(req)
             return res.status(200).json({message: "post created successfully"})
-
         } catch (e) {
+            logger.adminError(e)
             console.log(e);
             if (e.code === 11000){
                 return res.status(400).send({message: `Пост с таким номером (${e.keyValue.id}) уже существует!`})
@@ -26,8 +28,10 @@ class postsController {
             const posts = await Post.findOne({
                 id: req.params.id
             })
+            logger.user(req)
             return res.status(200).json(posts)
         } catch (e) {
+            logger.userError(req)
             console.log(e);
             res.status(500).json(e)
         }
@@ -38,10 +42,12 @@ class postsController {
                 id: req.params.id
             })
             if (!posts.deletedCount) {return res.status(400).json({message: `no post with id ${req.params.id}`})}
+            logger.admin(req)
             return res.status(200).json({
                 message: "post deleted successfully"
             })
         } catch (e) {
+            logger.adminError(e)
             console.log(e);
             res.status(500).json(e)
         }
@@ -70,8 +76,10 @@ class postsController {
                     new: true
                 }
             )
+            logger.admin(req)
             return res.status(200).json(update)
         } catch (e) {
+            logger.adminError(e)
             console.log(e);
             res.status(500).json(e)
         }

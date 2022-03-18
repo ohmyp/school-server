@@ -1,11 +1,14 @@
 const fs = require('fs');
+const logger = require('../logger');
 
 class downloadController {
     async download(req, res) {
         try {
-            const file = `${process.env.FILES_PATH}admin/createlesson/${req.params.filename}`;
+            const file = `${process.env.FILES_PATH}admin/createlesson/${req.params.filename}`
+            logger.user(req)
             return res.download(file)
         } catch (e) {
+            logger.userError(e)
             console.log(e);
             res.status(500).json(e)
         }
@@ -16,13 +19,12 @@ class downloadController {
             res.send("Ошибка при загрузке файла")
         else {
             const link = "https://api.oneschool511.ru/static/"  + req.params.path.split('-').join('/') + '/' + filedata[0].filename
-
+            logger.user(req)
             res.status(200).json({
                 message: 'Файл успешно загружен',
                 link
             })
         }
-
     }
     async getFiles(req, res) {
        const testFolder = `${process.env.FILES_PATH}admin/${req.params.category}`

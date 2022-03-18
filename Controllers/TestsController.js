@@ -1,15 +1,18 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const { dateToNormal } = require("../Handlers/DateHandler");
-const mailHandler = require('../Handlers/MailHandler')
+const mailHandler = require('../Handlers/MailHandler');
+const logger = require("../logger");
 const TestResult = require('../Models/TestResult')
 
 class testsController {
     async getResults(req, res){
         try {
             const results = await TestResult.find({id:req.params.id})
+            logger.admin(req)
             res.send(results)
         } catch (e) {
+            logger.adminError(e)
             console.log(e);
             res.status(400)
         }
@@ -17,8 +20,10 @@ class testsController {
     async getAllResults(req, res){
         try {
             const results = await TestResult.find({})
+            logger.admin(req)
             res.send(results)
         } catch (e) {
+            logger.adminError(e)
             console.log(e);
             res.status(400)
         }
@@ -56,7 +61,6 @@ class testsController {
         } catch (e) {
             console.log(e);
         }
-    
     }
 }
 module.exports = new testsController()

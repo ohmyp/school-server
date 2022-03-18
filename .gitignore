@@ -131,3 +131,6 @@ dist
 files 
 public
 DS_Store
+.DS_Store
+logger.js
+Logs
