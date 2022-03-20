@@ -7,9 +7,7 @@ class postsController {
             const post = new Post({
                 id: req.body.id,
                 title: req.body.title,
-                headText: req.body.headText,
-                bottomText: req.body.bottomText,
-                image: req.body.image
+                postBody: req.body.postBody,
             })
             await post.save()
             logger.admin(req)
@@ -69,9 +67,7 @@ class postsController {
                 }, {
                     id: req.body.id,
                     title: req.body.title,
-                    headText: req.body.headText,
-                    bottomText: req.body.bottomText,
-                    image: req.body.image
+                    postBody: req.body.postBody,
                 }, {
                     new: true
                 }
