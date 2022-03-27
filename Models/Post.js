@@ -10,18 +10,10 @@ const schema = new Schema({
         type: String,
         required: true,
     },
-    headText: {
+    postBody: {
         type: String,
         required: true,
-    },
-    bottomText: {
-        type: String,
-        required: true,
-    },
-    image: {
-        type: String,
-        required: true,
-    },
+    }
 });
 
 module.exports = model("Post", schema)
