@@ -1,27 +1,5 @@
 const logger = require('../logger')
-const mysql = require("mysql2");
-
-function fetchDB(query, res){
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        database: "oneschool",
-        password: "ifmoCRETA2133mari!"
-    })
-    connection.connect((err) => {
-        if (err) {
-            return console.error("Ошибка: " + err.message);
-        } else {
-            ;
-        }
-    });
-    connection.query(query,
-    (err, results, fields) => {
-        if (err) console.log(err)
-        // console.log(results)
-        res.json(results)
-    });
-}
+const fetchDB = require('../Handlers/DataBaseHandler')
 
 class postsController {
     // async createPost(req, res) {
@@ -43,8 +21,14 @@ class postsController {
     //         return res.status(400).send({message: e.message})
     //     }
     // }
-    createPost(req, res, next) {
-        fetchDB(`insert into post (title, postBody, image) values ("${req.body.title}", '${req.body.postBody}', "${req.body.image}");`, res)
+    async createPost(req, res, next) {
+        try {
+            const query = await fetchDB(`insert into post (title, postBody, image) values ("${req.body.title}", '${req.body.postBody}', "${req.body.image}");`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async deletePost(req, res) {
     //     try {
@@ -62,8 +46,14 @@ class postsController {
     //         res.status(500).json(e)
     //     }
     // }
-    deletePost(req, res, next) {
-        fetchDB(`delete from post where id=${req.params.id};`, res)
+    async deletePost(req, res, next) {
+        try {
+            const query = await fetchDB(`delete from post where id=${req.params.id};`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async updatePost(req, res) {
     //     try {
@@ -86,8 +76,15 @@ class postsController {
     //         res.status(500).json(e)
     //     }
     // }
-    updatePost(req, res, next) {
-        fetchDB(`update post set title="${req.body.title}", postBody='${req.body.postBody}', image="${req.body.image}" where id=${req.params.id};`, res)
+    async updatePost(req, res, next) {
+        try {
+            const query = await fetchDB(`update post set title="${req.body.title}", postBody='${req.body.postBody}', image="${req.body.image}" where id=${req.params.id};`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+
+        }
     }
     // async getPost(req, res) {
     //     try {
@@ -102,8 +99,14 @@ class postsController {
     //         res.status(500).json(e)
     //     }
     // }
-    getPost(req, res, next) {
-        fetchDB(`select * from post where id=${req.params.id}`, res)
+    async getPost(req, res, next) {
+        try {
+            const query = await fetchDB(`select * from post where id=${req.params.id}`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async getPosts(req, res) {
     //     try {
@@ -114,8 +117,14 @@ class postsController {
     //         res.status(500).json(e)
     //     }
     // }
-    getPosts(req, res, next) {
-        fetchDB(`select * from post`, res)
+    async getPosts(req, res, next) {
+        try {
+            const query = await fetchDB(`select * from post`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
 }
 

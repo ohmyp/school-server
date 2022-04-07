@@ -1,30 +1,15 @@
 const logger = require('../logger')
-const mysql = require("mysql2");
+const fetchDB = require('../Handlers/DataBaseHandler')
 
-function fetchDB(query, res){
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        database: "oneschool",
-        password: "ifmoCRETA2133mari!"
-    })
-    connection.connect((err) => {
-        if (err) {
-            return console.error("Ошибка: " + err.message);
-        } else {
-            ;
-        }
-    });
-    connection.query(query,
-    (err, results, fields) => {
-        if (err) console.log(err)
-        console.log(results)
-        res.json(results)
-    });
-}
 class lessonsController {
-    createLesson(req, res, next) {
-        fetchDB(`insert into lesson (title, type, files, tag) values ("${req.body.title}", '${req.body.type}', '${JSON.stringify(req.body.files)}', "${req.body.tag}");`, res)
+    async createLesson(req, res, next) {
+        try {
+            const query = await fetchDB(`insert into lesson (title, type, files, tag) values ("${req.body.title}", '${req.body.type}', '${JSON.stringify(req.body.files)}', "${req.body.tag}");`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async createLesson(req, res) {
     //     try {
@@ -47,8 +32,14 @@ class lessonsController {
     //         })
     //     }
     // }
-    getLesson(req, res, next) {
-        fetchDB(`select * from lesson where id=${req.params.id} and type="${req.params.type}"`, res)
+    async getLesson(req, res, next) {
+        try {
+            const query = await fetchDB(`select * from lesson where id=${req.params.id} and type="${req.params.type}"`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async getLesson(req, res) {
     //     try {
@@ -64,8 +55,14 @@ class lessonsController {
     //         res.status(500).json(e)
     //     }
     // }
-    getLessons(req, res, next) {
-        fetchDB(`select * from lesson where type="${req.params.type}"`, res)
+    async getLessons(req, res, next) {
+        try {
+            const query = await fetchDB(`select * from lesson where type="${req.params.type}"`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async getLessons(req, res) {
     //     try {
@@ -78,8 +75,14 @@ class lessonsController {
     //         res.status(500).json(e)
     //     }
     // }
-    getAllLessons(req, res, next) {
-        fetchDB(`select * from lesson`, res)
+    async getAllLessons(req, res, next) {
+        try {
+            const query = await fetchDB(`select * from lesson`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async getAllLessons(req, res) {
     //     try {
@@ -90,8 +93,14 @@ class lessonsController {
     //         res.status(500).json(e)
     //     }
     // }
-    deleteLesson(req, res, next) {
-        fetchDB(`delete from lesson where id=${req.params.id};`, res)
+    async deleteLesson(req, res, next) {
+        try {
+            const query = await fetchDB(`delete from lesson where id=${req.params.id};`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async deleteLesson(req, res) {
     //     try {
@@ -108,8 +117,14 @@ class lessonsController {
     //         res.status(500).json(e)
     //     }
     // }
-    updateLesson(req, res, next) {
-        fetchDB(`update lesson set title="${req.body.title}", files='${JSON.stringify(req.body.files)}', tag="${req.body.tag}" where id=${req.params.id} and type="${req.params.type}";`, res)
+    async updateLesson(req, res, next) {
+        try {
+            const query = await fetchDB(`update lesson set title="${req.body.title}", files='${JSON.stringify(req.body.files)}', tag="${req.body.tag}" where id=${req.params.id} and type="${req.params.type}";`)
+            res.send(query)
+        } catch (e) {
+            console.log(e)
+            res.send(e)
+        }
     }
     // async updateLesson(req, res) {
     //     try {
