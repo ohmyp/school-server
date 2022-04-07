@@ -1,12 +1,12 @@
-const User = require('../Models/User')
-const UserNoHash = require('../Models/UserNoHash')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const ctt = require("cyrillic-to-translit-js")
 const logger = require('../logger')
+const fetchDB = require('../Handlers/DataBaseHandler')
+
 class authController {
     async register(req, res, next) {
-        const {name, surname, middlename, classname} = req.body
+        const { name, surname, middlename, classname } = req.body
         let username = surname+'.'+name.split('')[0]+middlename?.split('')[0]+Math.floor(Math.random()*10)
         username = ctt().transform(username.toLowerCase())
 	    const role = classname === "admin" ? "admin" : "pupil" 
@@ -19,26 +19,20 @@ class authController {
                 name, surname, middlename, classname,
                 role
             })
-            const userNoHash = new UserNoHash({
-                username, password,
-                name: surname + " " + name + " " + middlename,
-                classname
-            })
             try {
-                await user.save()
-                await userNoHash.save()
-                logger.admin(req)
-                res.status(200).json(userNoHash)
+                const query = await fetchDB(`insert into user (firstname, lastname, middlename, classname, username, password, role) values ("${name}", '${surname}', '${middlename}', "${classname}", '${username}', "${hash}", "${role}");`)
+                res.send({username, password, role})
             } catch (e) {
-                logger.adminError(e)
+                console.log(e)
                 res.send(e)
             }
         });
-       
     }
+
     async login(req, res, next) {
         const { username, password } = req.body;
-        const candidate = await User.findOne({username})        
+        const candidate = await fetchDB(`select * from user where username='${username}';`).then(res => res[0])
+        console.log(candidate);
         if (candidate) {
             bcrypt.compare(password, candidate.password, (err, result) => {
                 if (err) res.status(500)
@@ -46,9 +40,8 @@ class authController {
                     const accessToken = jwt.sign({
                         username: candidate.username,
                         role: candidate.role,
-                        username: candidate.username, 
-                        name: candidate.name,
-                        surname: candidate.surname,
+                        name: candidate.firstname,
+                        surname: candidate.lastname,
                         middlename: candidate.middlename,
                         classname: candidate.classname
                     }, process.env.JWT_SECRET)
@@ -63,11 +56,13 @@ class authController {
             res.send({error:'Неправильное имя пользователя'})
         }
     }
-    async getUsers (req, res, next){
-        const users = await UserNoHash.find({})
-        res.json(users)
-    }
-    async auth (req, res, next){
+
+    // async getUsers (req, res, next){
+    //     const users = await UserNoHash.find({})
+    //     res.json(users)
+    // }
+
+    async auth(req, res, next){
         const authHeader = req.headers.authorization
         if (authHeader) {
             const token = authHeader.split(' ')[1]

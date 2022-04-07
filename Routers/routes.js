@@ -1,10 +1,11 @@
-const {Router} = require('express')
+const { Router } = require('express')
 const router = Router()
 const postsController = require('../Controllers/PostControllers')
 const lessonsController = require('../Controllers/LessonControllers')
 const downloadController = require('../Controllers/DownloadControllers')
 const testsController = require('../Controllers/TestsController')
 const authController = require('../Controllers/AuthController')
+const serviceController = require('../Controllers/ServiceController')
 const { authenticateJWT } = require('../Middlewares/AuthMiddleware')
 
 
@@ -26,12 +27,14 @@ router.post('/upload/:path', downloadController.upload)
 router.get('/files/:category', downloadController.getFiles)
 
 router.get('/auth', authController.auth)
-router.post('/auth/register', authenticateJWT, authController.register)
+router.post('/auth/register', authController.register)
 router.post('/auth/login', authController.login)
-router.get('/auth/users', authenticateJWT, authController.getUsers)
+// router.get('/auth/users', authenticateJWT, authController.getUsers)
 
-router.post('/results', testsController.sendMail)
-router.get('/results', authenticateJWT, testsController.getAllResults)
-router.get('/results/:id', authenticateJWT, testsController.getResults)
+router.post('/results', testsController.saveResult)
+router.get('/results', authenticateJWT, testsController.getResults)
+router.get('/results/:id', authenticateJWT, testsController.getResult)
+
+router.get('/status', serviceController.isAvailable)
 
 module.exports = router

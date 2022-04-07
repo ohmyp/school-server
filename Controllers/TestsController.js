@@ -1,65 +1,77 @@
 require("dotenv").config();
-const nodemailer = require("nodemailer");
 const { dateToNormal } = require("../Handlers/DateHandler");
-const mailHandler = require('../Handlers/MailHandler');
 const logger = require("../logger");
 const TestResult = require('../Models/TestResult')
+const fetchDB = require('../Handlers/DataBaseHandler')
 
 class testsController {
-    async getResults(req, res){
+    // async getResult(req, res) {
+    //     try {
+    //         const results = await TestResult.find({
+    //             id: req.params.id
+    //         })
+    //         logger.admin(req)
+    //         res.send(results)
+    //     } catch (e) {
+    //         logger.adminError(e)
+    //         console.log(e);
+    //         res.status(400)
+    //     }
+    // }
+    async getResult(req, res, next) {
         try {
-            const results = await TestResult.find({id:req.params.id})
-            logger.admin(req)
-            res.send(results)
+            const query = await fetchDB(`select * from test_result where id=${req.params.id}`)
+            res.send(query)
         } catch (e) {
-            logger.adminError(e)
-            console.log(e);
-            res.status(400)
+            console.log(e)
+            res.send(e)
         }
     }
-    async getAllResults(req, res){
+    // async getResults(req, res) {
+    //     try {
+    //         const results = await TestResult.find({})
+    //         logger.admin(req)
+    //         res.send(results)
+    //     } catch (e) {
+    //         logger.adminError(e)
+    //         console.log(e);
+    //         res.status(400)
+    //     }
+    // }
+    async getResults(req, res, next) {
         try {
-            const results = await TestResult.find({})
-            logger.admin(req)
-            res.send(results)
+            const query = await fetchDB(`select * from test_result`)
+            res.send(query)
         } catch (e) {
-            logger.adminError(e)
-            console.log(e);
-            res.status(400)
+            console.log(e)
+            res.send(e)
         }
     }
-    async sendMail(req, res) {
-        // const html = mailHandler.makeLetter(req.body)
-        // const transporter = nodemailer.createTransport({
-        //     service: 'gmail',
-        //     auth: {
-        //         user: "oneschool511@gmail.com",
-        //         pass: "ifmoCRETA2133mari",
-        //     },
-        // })
-
-        // const info = await transporter.sendMail({
-        //     from: `"Единая школа 511" <oneschool511@gmail.com>`, 
-        //     to: "sherbaken0875@icloud.com",
-        //     subject: "Результаты анкетирования", 
-        //     text: JSON.stringify(req.query),
-        //     html,
-        // });
+    // async saveResult(req, res) {
+    //     try {
+    //         const testResult = new TestResult({
+    //             id: req.body.id,
+    //             name: req.body.name,
+    //             firstName: req.body.user.firstName,
+    //             lastName: req.body.user.lastName,
+    //             classNumber: req.body.user.classNumber,
+    //             classLetter: req.body.user.classLetter,
+    //             results: req.body.results,
+    //             date: dateToNormal(req.body.date)
+    //         })
+    //         await testResult.save()
+    //         res.send("ok").status(200)
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
+    async saveResult(req, res, next) {
         try {
-            const testResult = new TestResult({
-                id: req.body.id,
-                name: req.body.name,
-                firstName: req.body.user.firstName,
-                lastName: req.body.user.lastName,
-                classNumber: req.body.user.classNumber,
-                classLetter: req.body.user.classLetter,
-                results: req.body.results,
-                date: dateToNormal(req.body.date)
-            })
-            await testResult.save()
-            res.send("ok").status(200)
+            const query = await fetchDB(`insert into test_result (firstName, lastName, classNumber, classLetter, testName, testId, results, date) values ("${req.body.user.firstName}", '${req.body.user.lastName}', "${req.body.user.classNumber}", "${req.body.user.classLetter}", "${req.body.testName}", "${req.body.testId}", '${JSON.stringify(req.body.results)}', "${dateToNormal(req.body.date)}");`)
+            res.send(query)
         } catch (e) {
-            console.log(e);
+            console.log(e)
+            res.send(e)
         }
     }
 }
