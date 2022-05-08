@@ -13,12 +13,6 @@ class authController {
         const password = Math.random().toString(36).slice(-8);
         bcrypt.hash(password, 8, async (err, hash) => {
             if (err) res.status(500)
-            const user = new User({
-                username,
-                password: hash,
-                name, surname, middlename, classname,
-                role
-            })
             try {
                 const query = await fetchDB(`insert into user (firstname, lastname, middlename, classname, username, password, role) values ("${name}", '${surname}', '${middlename}', "${classname}", '${username}', "${hash}", "${role}");`)
                 res.send({username, password, role})
@@ -32,7 +26,6 @@ class authController {
     async login(req, res, next) {
         const { username, password } = req.body;
         const candidate = await fetchDB(`select * from user where username='${username}';`).then(res => res[0])
-        console.log(candidate);
         if (candidate) {
             bcrypt.compare(password, candidate.password, (err, result) => {
                 if (err) res.status(500)
