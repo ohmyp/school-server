@@ -1,23 +1,9 @@
 require("dotenv").config();
 const { dateToNormal } = require("../Handlers/DateHandler");
-const logger = require("../logger");
-const TestResult = require('../Models/TestResult')
 const fetchDB = require('../Handlers/DataBaseHandler')
 
 class testsController {
-    // async getResult(req, res) {
-    //     try {
-    //         const results = await TestResult.find({
-    //             id: req.params.id
-    //         })
-    //         logger.admin(req)
-    //         res.send(results)
-    //     } catch (e) {
-    //         logger.adminError(e)
-    //         console.log(e);
-    //         res.status(400)
-    //     }
-    // }
+
     async getResult(req, res, next) {
         try {
             const query = await fetchDB(`select * from test_result where id=${req.params.id}`)
@@ -27,17 +13,7 @@ class testsController {
             res.send(e)
         }
     }
-    // async getResults(req, res) {
-    //     try {
-    //         const results = await TestResult.find({})
-    //         logger.admin(req)
-    //         res.send(results)
-    //     } catch (e) {
-    //         logger.adminError(e)
-    //         console.log(e);
-    //         res.status(400)
-    //     }
-    // }
+
     async getResults(req, res, next) {
         try {
             const query = await fetchDB(`select * from test_result`)
@@ -47,27 +23,19 @@ class testsController {
             res.send(e)
         }
     }
-    // async saveResult(req, res) {
-    //     try {
-    //         const testResult = new TestResult({
-    //             id: req.body.id,
-    //             name: req.body.name,
-    //             firstName: req.body.user.firstName,
-    //             lastName: req.body.user.lastName,
-    //             classNumber: req.body.user.classNumber,
-    //             classLetter: req.body.user.classLetter,
-    //             results: req.body.results,
-    //             date: dateToNormal(req.body.date)
-    //         })
-    //         await testResult.save()
-    //         res.send("ok").status(200)
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
+
     async saveResult(req, res, next) {
         try {
-            const query = await fetchDB(`insert into test_result (firstName, lastName, classNumber, classLetter, testName, testId, results, date) values ("${req.body.user.firstName}", '${req.body.user.lastName}', "${req.body.user.classNumber}", "${req.body.user.classLetter}", "${req.body.testName}", "${req.body.testId}", '${JSON.stringify(req.body.results)}', "${dateToNormal(req.body.date)}");`)
+            if (req.body.username) {
+                const query = await fetchDB(`select * from user where username="${req.body.username}"`);
+                console.log(111, query);
+                req.body.user.firstName = query[0].firstname;
+                req.body.user.lastName = query[0].lastname;
+                req.body.user.classLetter = query[0].classname.slice(-1);
+                req.body.user.classNumber = query[0].classname.slice(0, -1);
+            }
+            console.log(req.body);
+            const query = await fetchDB(`insert into test_result (firstName, lastName, classNumber, classLetter, testName, testId, results, date, username, max) values ("${req.body.user.firstName}", '${req.body.user.lastName}', "${req.body.user.classNumber}", "${req.body.user.classLetter}", "${req.body.testName}", "${req.body.testId}", '${JSON.stringify(req.body.results)}', "${dateToNormal(req.body.date)}", "${req.body.username? req.body.username : ''}", "${req.body.max}");`)
             res.send(query)
         } catch (e) {
             console.log(e)
@@ -75,4 +43,5 @@ class testsController {
         }
     }
 }
+
 module.exports = new testsController()

@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require('express')
-const mongoose = require('mongoose');
 const multer = require("multer");
 const router = require('./Routers/routes')
 const fs = require('fs');
@@ -9,15 +8,6 @@ const cors = require('cors');
 
 const port = process.env.PORT || 3001
 const host = process.env.HOST_NAME || '127.0.0.1'
-const mongo_uri = process.env.MONGO_URI
-
-mongoose.connect(mongo_uri).then(() => {
-    console.log("DB Connected");
-});
-
-mongoose.connection.on("error", err => {
-    console.log(`DB Connection Error: ${err.message}`);
-});
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
