@@ -1,13 +1,14 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const ctt = require("cyrillic-to-translit-js")
-const logger = require('../logger')
 const fetchDB = require('../Handlers/DataBaseHandler')
 
 class authController {
     async register(req, res, next) {
         const { name, surname, middlename, classname } = req.body
-        let username = surname+'.'+name.split('')[0]+middlename?.split('')[0]+Math.floor(Math.random()*10)
+        let username = surname + '.' + name.split('')[0]
+            + (middlename ? middlename.split('')[0] : '')
+            + Math.floor(Math.random() * 10)
         username = ctt().transform(username.toLowerCase())
 	    const role = classname === "admin" ? "admin" : "pupil" 
         const password = Math.random().toString(36).slice(-8);
@@ -38,9 +39,9 @@ class authController {
                         middlename: candidate.middlename,
                         classname: candidate.classname
                     }, process.env.JWT_SECRET)
-                    logger.log(req)
                     res.json({
-                        accessToken
+                        accessToken,
+                        username
                     })
                 }
                 else res.json({error:'Неправильный пароль'})
@@ -50,10 +51,6 @@ class authController {
         }
     }
 
-    // async getUsers (req, res, next){
-    //     const users = await UserNoHash.find({})
-    //     res.json(users)
-    // }
 
     async auth(req, res, next){
         const authHeader = req.headers.authorization
@@ -61,7 +58,6 @@ class authController {
             const token = authHeader.split(' ')[1]
             jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
                 if (err) return res.json(err)
-                logger.log(req)
                 return res.json(user)
             })
         } else {

@@ -1,8 +1,6 @@
 const {formatDate} = require('./DateHandler')
 class mailHandler {
     makeLetter(data) {
-        console.log(data);
-        
         const parsedDate = new Date(data.date)
         const date = `${formatDate(parsedDate.getDate())}.${formatDate(parsedDate.getMonth())}.${parsedDate.getFullYear()} ${formatDate(parsedDate.getHours())}:${formatDate(parsedDate.getMinutes())}`
 
